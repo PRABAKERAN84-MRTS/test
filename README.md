@@ -53,6 +53,16 @@ This implementation is intended as a practical reference prototype for research-
 - Keep the terminal running while using the UI; press `Ctrl+C` to stop.
 - If Streamlit prompts for telemetry on first run, just press Enter once.
 
+## Check Gradio output in local browser
+Run this in this environment:
+
+```bash
+cd /workspace/test
+./run_gradio_local.sh
+```
+
+Then open: `http://localhost:7860`
+
 ## Google Colab + Gradio (same pipeline)
 Use this when you want the same risk + explainability + energy workflow in Colab:
 
