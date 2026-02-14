@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: expense_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: expenses_db
+      POSTGRES_USER: expense_user
+      POSTGRES_PASSWORD: expense_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U expense_user -d expenses_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+    container_name: expense_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg2://expense_user:expense_pass@db:5432/expenses_db
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: expense_frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8501:8501"
+
+volumes:
+  postgres_data:
