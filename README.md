@@ -52,3 +52,17 @@ This implementation is intended as a practical reference prototype for research-
 - Open: `http://localhost:8501` in Chrome/Firefox/Edge/Safari.
 - Keep the terminal running while using the UI; press `Ctrl+C` to stop.
 - If Streamlit prompts for telemetry on first run, just press Enter once.
+
+## Google Colab + Gradio (same pipeline)
+Use this when you want the same risk + explainability + energy workflow in Colab:
+
+```python
+!pip install -q gradio scikit-learn pandas numpy matplotlib
+
+# Option A: if this repo is already in your Colab runtime
+from gradio_app import launch_colab_app
+launch_colab_app(share=True)
+```
+
+If you start from scratch in Colab, upload `gradio_app.py` first, then run the same cell above.
+
